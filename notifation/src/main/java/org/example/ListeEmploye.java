@@ -1,9 +1,10 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListeEmploye {
-    List<Employe> listesEmployes;
+    List<Employe> listesEmployes  = new ArrayList<>();
     public ListeEmploye(){}
     public ListeEmploye(List<Employe> listesEmployes){
         this.listesEmployes = listesEmployes;

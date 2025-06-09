@@ -1,0 +1,90 @@
+{
+  "listesEmployes" : [ {
+    "nom" : "traore",
+    "prenom" : "mohamed",
+    "email" : "mohamed@gmail.com",
+    "password" : "",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "Traore",
+    "prenom" : "Mohamed",
+    "email" : "email@gmail.com",
+    "password" : "midajuhhh",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "Coulibaly",
+    "prenom" : "Ousmane",
+    "email" : "ousmanecouli@gmail.Com",
+    "password" : "ousmane",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "Sekou",
+    "prenom" : "Traore",
+    "email" : "sekou@gmail.com",
+    "password" : "sekou",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "Hamza",
+    "prenom" : "samno",
+    "email" : "samno@gmail.com",
+    "password" : "hamza",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "daddy",
+    "prenom" : "traore",
+    "email" : "daddy@gmail.com",
+    "password" : "daddu",
+    "estAbonne" : true,
+    "notification" : [ ]
+  }, {
+    "nom" : "mohamed",
+    "prenom" : "toure",
+    "email" : "medtoure@gmail.com",
+    "password" : "medtoure",
+    "estAbonne" : true,
+    "notification" : [ {
+      "objet" : "objet",
+      "contenu" : "message"
+    } ]
+  }, {
+    "nom" : "Tree",
+    "prenom" : "ree",
+    "email" : "tree@gmail.com",
+    "password" : "tree",
+    "estAbonne" : false,
+    "notification" : [ ]
+  }, {
+    "nom" : "Traore",
+    "prenom" : "Mohamed",
+    "email" : "traoremohamed@gmail.com",
+    "password" : "midajuha",
+    "estAbonne" : false,
+    "notification" : [ {
+      "objet" : "dad",
+      "contenu" : "comment cv ?"
+    }, {
+      "objet" : "message",
+      "contenu" : "à moi"
+    } ]
+  } ]
+}

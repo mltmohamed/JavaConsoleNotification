@@ -1,9 +1,10 @@
 package org.example;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Scanner;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.io.File;
 import java.io.IOException;
 
 public class Admin implements Abonnement {
@@ -26,24 +27,24 @@ public class Admin implements Abonnement {
     // les methodes de l'interface Abonnement
     @Override
     public void ajouterAbonner() throws IOException{
-
-        System.out.print("Entrer l'email de l'employé correspondannt");
-        String saisiEmailAbonner = scanner.nextLine();
-
-
         // je verifi si le fichier existe
-        if(fichierJson.exists()){
+        List<Employe> ajouter = new ArrayList<>();
+        if(fichierJson.exists() && fichierJson.length() > 0){
+            System.out.print("Entrer l'email de l'employé  : ");
+            String saisiEmailAbonner = scanner.nextLine();
             ListeEmploye listesdesEmployes = mapper.readValue((fichierJson),ListeEmploye.class);
             for(Employe liste : listesdesEmployes.getListesEmployes()){
                 //condition pour voir si l'email existe et que l'utilisateur est dejà abonner
-                if((liste.getEmail()).equals(saisiEmailAbonner) && liste.getIsEstAbonne()==true){
+                if((liste.getEmail()).equals(saisiEmailAbonner) && liste.getEstAbonne()==true){
                     System.out.print("L'utilisateur " + liste.getNom() + " "+ liste.getPrenom() + "est dejà abonné à un service de notification");
+                    return;
                 }
                 //condition pour voir si l'email existe et que l'utilisateur n'est pas abonner
-                else if ((liste.getEmail()).equals(saisiEmailAbonner) && liste.getIsEstAbonne() == false) {
+                else if ((liste.getEmail()).equals(saisiEmailAbonner) && liste.getEstAbonne() == false) {
                     liste.setEstAbonne(true);
                     System.out.println("L'utilisateur " + liste.getNom() + " "+ liste.getPrenom() + "a été abonné à un service de notification avec succès");
                     mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listesdesEmployes);
+                    return;
                 }
                 //condition pour voir si l'employé n'existe pas dans le fichier json
                 else if(!((liste.getEmail()).equals(saisiEmailAbonner))){
@@ -63,36 +64,67 @@ public class Admin implements Abonnement {
                         String passwordNouveauAbonne = scanner.nextLine();
                         Employe employe = new Employe(nomNouveauAbonne,prenomNouveauAbonne,emailNouveauAbonne,passwordNouveauAbonne);
                         employe.setEstAbonne(true);
-                        listesdesEmployes.getListesEmployes().add(employe);
+                        ajouter.add(employe);
+                        listesdesEmployes.getListesEmployes().addAll(ajouter);
                         mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listesdesEmployes);
+                        System.out.println("Le nouveau abonné a été ajouter avec succès");
+                        return;
 
                         // Je dois envoyer un email au nouveau abonné Ici
                     }
                     // condition si l'admin ne veut pas creer un nouveau utilisateur
                     else if(saisinouveauxEmploye == 2){
                             System.out.print("Ok l'admin");
+                            return;
                     }
                     // condition si l'admin fait un choix indisponible
                     else {
                         System.out.println("Désolé le choix est indisponible");
+                        return;
                     }
                 }
             }
-
+            listesdesEmployes.getListesEmployes().addAll(ajouter);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listesdesEmployes);
+            System.out.println("Le nouveau abonné a été ajouter avec succès");
         }
-        // Condition si le fichier n'existe pas
+        //condition pour verifier si le json existe mais est vide
+        else if(fichierJson.exists() && fichierJson.length()==0) {
+            System.out.println("Aucun employé n'existe pour le moment voulez vous creer un nouveau ?");
+            System.out.print("1.OUI \n2.NON");
+            Scanner scanner = new Scanner(System.in);
+            String saisiExiste = scanner.nextLine();
+            int saisiExistes = Integer.parseInt(saisiExiste);
+            if(saisiExistes == 1){
+                System.out.print("Entrer le nom de l'abonné  : ");
+                String nomNouveauAbonne = scanner.nextLine();
+                System.out.print("Entrer le prenom de l'abonné : ");
+                String prenomNouveauAbonne = scanner.nextLine();
+                System.out.print("Entrer l'email de l'abonné : ");
+                String emailNouveauAbonne = scanner.nextLine();
+                System.out.print("Entrer le mot de passe de l'abonné : ");
+                String passwordNouveauAbonne = scanner.nextLine();
+                ListeEmploye listesdesEmployes = new ListeEmploye();
+                Employe employe = new Employe(nomNouveauAbonne,prenomNouveauAbonne,emailNouveauAbonne,passwordNouveauAbonne);
+                employe.setEstAbonne(true);
+                listesdesEmployes.getListesEmployes().add(employe);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listesdesEmployes);
+                System.out.println("Votre nouveau abonné a été ajouter avec succès");
+            }
+            else if (saisiExistes == 2) {
+                System.out.println("Ok l'admin");
+            }else {System.out.println("Choix non disponible");}
+        }
         else {
-            System.out.print("Desolé le fichier json n'existe pas contactez le developpeur ");
+            System.out.println("Desolé mais le fichier json n'existe !");
         }
-
-
     }
 
     @Override
     public void retirerAbonner() throws IOException{
         System.out.print("Veuillez entrez l'email de l'utilisateur à être retirer de l'abonnement");
         String emailUtilisteurRetirer = scanner.nextLine();
-        if (fichierJson.exists()){
+        if (fichierJson.exists() && fichierJson.length()>0){
             ListeEmploye listesEmployes = mapper.readValue((fichierJson), ListeEmploye.class);
             for(Employe liste : listesEmployes.getListesEmployes()){
                 // je verifi si l'email existe dans le json
@@ -101,24 +133,27 @@ public class Admin implements Abonnement {
                     System.out.println("l'abonné " + liste.getPrenom() + " "+ liste.getNom() +" a été retirer avec succès au service de notification");
                     mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listesEmployes);
                 }
-                // si l'email n'est pas dans le json
+                // à corriger
                 else {
-                    System.out.println("Impossible de trouver l'email de la personne");
+                    System.out.println("aucun abonné trouvé qui a l'email " +emailUtilisteurRetirer );
                 }
             }
-        }else {System.out.println("Le fichier est introuvable");}
+                // si l'email n'est pas dans le json
+
+        }else {System.out.println("le fichier est indiponible ou est vide");}
     }
     // La methode afficher la liste des abonnés
     public void afficherListeAbonner() throws IOException{
         ListeEmploye listesDesEmployesAAfficher = mapper.readValue(fichierJson,ListeEmploye.class);
         for(Employe liste : listesDesEmployesAAfficher.getListesEmployes()){
             //condition pour verifier si un employer est abonné ou pas
-            if(liste.getIsEstAbonne() == true){
-                System.out.println("prenom : " + liste.getPrenom() + "nom " + liste.getNom() + "email " + liste.getEmail());
+            if(liste.getEstAbonne() == true){
+                System.out.println("prenom : " + liste.getPrenom() + " nom : " + liste.getNom() + " email : " + liste.getEmail());
             }
         }
         if(listesDesEmployesAAfficher.getListesEmployes() == null){
             System.out.println("Aucune personne n'est abonné a un service de notification");
         }
+
     }
 }

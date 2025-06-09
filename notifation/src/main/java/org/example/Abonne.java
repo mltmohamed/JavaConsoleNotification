@@ -4,7 +4,6 @@ import java.io.File;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 public class Abonne extends Employe implements Message{
@@ -29,56 +28,47 @@ public class Abonne extends Employe implements Message{
     }
     @Override
     public void EnvoyerNotification() throws IOException{
+        Scanner scanner = new Scanner(System.in);
         File fichierJson = new File("lesEmployes.json");
         ObjectMapper mapper = new ObjectMapper();
-        if(fichierJson.exists()){
-            ListeEmploye listedesEmployes = mapper.readValue(fichierJson, ListeEmploye.class);
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Entrer votre email");
+        //JE verifi si le fichier existe
+        if(fichierJson.exists() && fichierJson.length() > 0){
+            System.out.println("Entrer votre email :");
             String email = scanner.nextLine();
-
-            System.out.println("Entrer votre mot de passe");
+            System.out.println("Entrer votre mot de passe :");
             String password = scanner.nextLine();
-            for(Employe liste : listedesEmployes.getListesEmployes()){
-                if(liste.getEmail().equals(email) && liste.getPassword().equals(password)){
-                    if(liste.getIsEstAbonne() == true){
-                        System.out.println("Entrer l'objet du message");
-                        String objets = scanner.nextLine();
-                        System.out.println("Entrer le contenu du message");
-                        String contenus = scanner.nextLine();
-                        Notification notification = new Notification(objets, contenus);
-                        for(Employe listes : listedesEmployes.getListesEmployes()){
-                            if(listes.getEmail().equals(email)){
-                                continue;
-                            }; // si la liste est null
-                            if(listes.getNotification() ==null){
-                                List<Notification> listeNotification = new ArrayList<Notification>();
-                                listeNotification.add(notification);
-                                listes.setListesNotification(listeNotification);
-                                mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listedesEmployes);
-
-                            } // si la liste contient des elements
-                            if(listes.getNotification() !=null){
-                                listes.getNotification().add(notification);
-                                mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson,listedesEmployes);
-                            }
-                            List<Notification> listeNotification = new ArrayList<Notification>();
-                            listeNotification.add(notification);
-                            listes.setListesNotification(listesNotification);
+            ListeEmploye listeEmploye = mapper.readValue(fichierJson,ListeEmploye.class);
+                String objets="";
+                String messages="";
+                for(Employe liste : listeEmploye.getListesEmployes()) {
+                    if (liste.getEmail().equals(email) && liste.getPassword().equals(password)) {
+                        if (liste.getEstAbonne() == true) {
+                            System.out.println("Entrer l'objet de la notification :");
+                            objets = scanner.nextLine();
+                            System.out.println("Entrer le message :");
+                            messages = scanner.nextLine();
                         }
                     }
-                    else if (liste.getIsEstAbonne() == false) {
-                        System.out.println("Desolé mais vous n'etes pas abonné à un service de notification");
+                    //condition pour l'email et le mot de passe n'est pas correct !
+                    else{
+                        System.out.println("l'email ou mot de passe incorrect");
                     }
                 }
-                else {
-                    System.out.println("Email ou mot de passe incorrect !");
+                Notification notification = new Notification(objets,messages);
+                List<Notification> mesNotifications = new ArrayList<>();
+                mesNotifications.add(notification);
+                for(Employe listes : listeEmploye.getListesEmployes()){
+                    if(listes.getEstAbonne() == true){
+                        listes.setListesNotification(mesNotifications);
+                        mapper.writerWithDefaultPrettyPrinter().writeValue(fichierJson, listeEmploye);
+                        System.out.println("Notification envoyé à " + listes.getNom() +" à son addresse "+ listes.getEmail());
+                    }
                 }
-            }
+
+        }else{
+            System.out.println("Desolé mais le fichier n'existe pas");
         }
-        else {
-            System.out.println("Désolé le fichier n'existe pas");
-        }
+
 
     }
 }

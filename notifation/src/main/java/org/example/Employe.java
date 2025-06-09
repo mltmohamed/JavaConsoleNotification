@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employe {
@@ -8,7 +9,8 @@ public class Employe {
     private String email;
     private String password;
     private boolean estAbonne = false;
-    List<Notification> listesNotification = null;
+    List<Notification> listesNotification = new ArrayList<>();
+    public Employe(){}
     public Employe(String nom, String prenom, String email, String password){
         this.nom = nom;
         this.prenom = prenom;
@@ -31,7 +33,7 @@ public class Employe {
 
     public String getPassword() {return password;}
 
-    public boolean getIsEstAbonne() {return estAbonne;}
+    public boolean getEstAbonne() {return estAbonne;}
     // les setters
     public void setEmail(String email) {this.email = email;}
 
