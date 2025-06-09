@@ -1,0 +1,21 @@
+{
+  "listePersonne" : [ {
+    "nom" : "Mohamed",
+    "age" : 23,
+    "listNotif" : [ {
+      "objet" : "Rien",
+      "contenu" : "Bonjour"
+    }, {
+      "objet" : "CV",
+      "contenu" : "Comment vous allez ?"
+    } ]
+  }, {
+    "nom" : "Mima",
+    "age" : 25,
+    "listNotif" : null
+  }, {
+    "nom" : "Happy",
+    "age" : 18,
+    "listNotif" : null
+  } ]
+}
